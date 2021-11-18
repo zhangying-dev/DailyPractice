@@ -1,0 +1,108 @@
+<!--
+ * @Author: Ying Zhang
+ * @Date: 2021-11-18 15:20:19
+ * @LastEditTime: 2021-11-18 17:02:43
+ * @LastEditors: Ying Zhang
+ * @Description: 
+ * @FilePath: /每日一题/11.18.html
+ * 道阻且长，行则将至
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 算法 1381. 设计一个支持增量操作的栈
+    // 算法题：https://leetcode-cn.com/problems/design-a-stack-with-increment-operation/
+    /**
+     * @param {number} maxSize
+     */
+    var CustomStack = function (maxSize) {
+      this.maxSize = maxSize;
+      this.stack = [];
+    };
+
+    /**
+     * @param {number} x
+     * @return {void}
+     */
+    CustomStack.prototype.push = function (x) {
+      if (this.stack.length < this.maxSize) {
+        this.stack.push(x);
+      } else {
+        return;
+      }
+    };
+
+    /**
+     * @return {number}
+     */
+    CustomStack.prototype.pop = function () {
+      return this.stack.length > 0 ? this.stack.pop() : -1;
+    };
+
+    /**
+     * @param {number} k
+     * @param {number} val
+     * @return {void}
+     */
+    CustomStack.prototype.increment = function (k, val) {
+      let length = Math.min(k, this.stack.length);
+      for (let i = 0; i < length; i++) {
+        this.stack[i] += val;
+      }
+    };
+
+    // 手写 Promise的相关方法
+    // 手写题：https://bigfrontend.dev/zh/problem/implement-Promise-allSettled
+    // 参考 https://juejin.cn/post/6844904020029472776
+
+    // 实现Promise.allSettled
+    const formatResult = (success, value) =>
+      success
+        ? { status: "fulfilled", value }
+        : { status: "rejected", reason: value };
+    Promise.allSettled = function (iterators) {
+      let promiseList = Array.from(iterators);
+      let length = promiseList.length;
+      let settledList = new Array(length);
+      let settledNum = 0;
+      return new Promise((resolve) => {
+        promiseList.length > 0
+          ? promiseList.forEach((item, index) => {
+              Promise.resolve(item)
+                .then((value) => {
+                  settledList[index] = formatResult(true, value);
+                  if (++settledNum === length) {
+                    resolve(settledList);
+                  }
+                })
+                .catch((error) => {
+                  settledList[index] = formatResult(false, error);
+                  if (++settledNum === length) {
+                    resolve(settledList);
+                  }
+                });
+            })
+          : resolve([]);
+      });
+    };
+    let a = new Promise((resolve, rejected) => {
+      setTimeout(resolve("a"), 1000);
+    });
+    let b = new Promise((resolve, rejected) => {
+      setTimeout(resolve("b"), 2000);
+    });
+    let c = new Promise((resolve, rejected) => {
+      setTimeout(rejected("c"), 500);
+    });
+    Promise.allSettled([a, b, c]).then((res) => {
+      console.log("res", res);
+    });
+  </script>
+</html>

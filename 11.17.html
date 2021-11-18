@@ -1,0 +1,100 @@
+<!--
+ * @Author: Ying Zhang
+ * @Date: 2021-11-17 10:03:33
+ * @LastEditTime: 2021-11-17 19:12:31
+ * @LastEditors: Ying Zhang
+ * @Description: 
+ * @FilePath: /每日一题/11.17.html
+ * 道阻且长，行则将至
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 今日题目：
+    // 1.实现symbol polyfill
+    // 题解：如果浏览器不支持情况下 写出让代码让浏览器支持symbol
+    (function () {
+      var root = this;
+      var SymbolPolyfill = function Symbol(description) {
+        // Symbol 函数前不能使用new命令
+        if (thi instanceof SymbolPolyfill) {
+          throw new TypeError("Symbol is not a constructor");
+        }
+        var description =
+          description === undefined ? undefined : String(description);
+        var symbol = Object.create({
+          toString: function () {
+            return `Symbol(${this._Description_})`
+            description
+          }
+        });
+        Object.defineProperties(symbol, {
+          _Description_: {
+            value: description,
+            writable: false,
+            enumerable: false,
+            configurable: false,
+          },
+        });
+
+        root.SymbolPolyfill = SymbolPolyfill;
+      };
+    })();
+
+    // //2.算法题目地址
+    //  * [821] 字符的最短距离
+    // https://leetcode-cn.com/problems/shortest-distance-to-a-character' *
+    /**
+     * @param {string} s
+     * @param {character} c
+     * @return {number[]}
+     */
+    var shortestToChar = function (s, c) {
+      let answer = Array(s.length);
+      let sArr = s.split("");
+      let cArr = [];
+      sArr.forEach((item, index) => {
+        if (item === c) {
+          cArr.push(index);
+        }
+      });
+      for (let i = 0; i < sArr.length; i++) {
+        answer[i] = cArr.reduce((acc, cur, idx, src) => {
+          return Math.min(acc, Math.abs(i - cur));
+        }, 10000);
+      }
+      return answer;
+    };
+
+    var shortestToChar = function (s, c) {
+      let answer = Array(s.length).fill(Infinity);
+      let sArr = s.split("");
+      let cArr = [];
+      sArr.forEach((item, index) => {
+        if (item === c) {
+          cArr.push(index);
+        }
+      });
+      for (let i = 0; i < sArr.length; i++) {
+        if (sArr[i] == c) {
+          answer[i] = 0;
+        }
+        for (let j = 0; j < cArr.length; j++) {
+          let diff = Math.abs(cArr[j] - i);
+          if (diff >= answer[i]) break;
+          answer[i] = diff;
+        }
+      }
+      return answer;
+    };
+
+    shortestToChar("loveleetcode", "e");
+  </script>
+</html>

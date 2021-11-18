@@ -1,0 +1,86 @@
+<!--
+ * @Author: Ying Zhang
+ * @Date: 2021-11-16 10:46:47
+ * @LastEditTime: 2021-11-18 17:06:23
+ * @LastEditors: Ying Zhang
+ * @Description: 
+ * @FilePath: /每日一题/11.16.html
+ * 道阻且长，行则将至
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 算法
+    // 989. 数组形式的整数加法
+    // 题目地址
+    // https://leetcode-cn.com/problems/add-to-array-form-of-integer/
+
+    /**
+     * @param {number[]} num
+     * @param {number} k
+     * @return {number[]}
+     */
+    // var addToArrayForm = function (num, k) {
+    //   return (BigInt(num.join("")) + BigInt(k)).toString().split("");
+    // };
+    var addToArrayForm = function (num, k) {
+      let res = [];
+      let length = num.length;
+      for (let i = length - 1; i >= 0; i--) {
+        let sum = num[i] + (k % 10);
+        k = Math.floor(k / 10);
+        if (sum >= 10) {
+          k++;
+          sum -= 10;
+        }
+        res.push(sum);
+      }
+      for (; k > 0; k = Math.floor(k / 10)) {
+        res.push(k % 10);
+      }
+      return res.reverse();
+    };
+
+    addToArrayForm(
+      [1, 2, 6, 3, 0, 7, 1, 7, 1, 9, 7, 5, 6, 6, 4, 4, 0, 0, 6, 3], // 5,7,9
+      516
+    );
+
+    // console.log(addToArrayForm([1, 5], 406));
+    // console.log(addToArrayForm([2, 1, 5], 806));
+
+    // 手写
+    // 1.手写函数柯里化
+    // - 函数柯理化基本概念是：柯里化（Currying）是把 接受多个参数的函数 变换成 接受一个单一参数(最初函数的第一个参数)的函数，并且 返回接受余下的参数 且 返回结果的新函数 的技术；
+
+    function curry(func) {
+      return function curriedFun(...args) {
+        if (args.length >= func.length) {
+          return func.apply(this, args); // 当函数传入的参数 大于等于 函数接受的参数时 执行函数
+        } else {
+          return function (...args2) {
+            return curriedFun.apply(this, args.concat(args2)); // 参数收集
+          };
+        }
+      };
+    }
+    function sum(a, b, c) {
+      return a + b + c;
+    }
+
+    let curriedSum = curry(sum);
+
+    console.log(curriedSum(1, 2, 3)); // 6, still callable normally
+    console.log(curriedSum(1)(2, 3)); // 6, currying of 1st arg
+    console.log(curriedSum(1)(2)(3)); // 6, full currying
+
+    // - 柯里化函数的运行过程其实是一个参数的收集过程; 参考：https://zh.javascript.info/currying-partials
+  </script>
+</html>
