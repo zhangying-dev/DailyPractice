@@ -1,7 +1,7 @@
 <!--
  * @Author: Ying Zhang
  * @Date: 2021-11-22 16:52:18
- * @LastEditTime: 2021-11-22 16:54:21
+ * @LastEditTime: 2021-11-22 22:47:12
  * @LastEditors: Ying Zhang
  * @Description: 
  * @FilePath: /每日一题/11.22.html
@@ -17,12 +17,92 @@
   </head>
   <body></body>
   <script>
-      // 算法题：https://leetcode-cn.com/problems/implement-queue-using-stacks/
+    // 算法题：https://leetcode-cn.com/problems/implement-queue-using-stacks/
+    // 232. 用栈实现队列
 
+    // 思路
+    // 将一个栈当作输入栈，用于压入 {push}push 传入的数据；另一个栈当作输出栈，用于 {pop}pop 和 {peek}peek 操作。
+    // 每次 {pop}pop 或 \{peek}peek 时，若输出栈为空则将输入栈的全部数据依次弹出并压入输出栈，这样输出栈从栈顶往栈底的顺序就是队列从队首往队尾的顺序。
 
+    var MyQueue = function () {
+      this.stack_i = [];
+      this.stack_o = [];
+    };
 
+    /**
+     * @param {number} x
+     * @return {void}
+     */
+    MyQueue.prototype.push = function (x) {
+      this.stack_i.push(x);
+    };
 
-      // 手写题：https://bigfrontend.dev/zh/problem/the-angle-between-hour-hand-and-minute-hand-of-a-clock
+    /**
+     * @return {number}
+     */
+    MyQueue.prototype.pop = function () {
+      if (!this.stack_o.length) {
+        this.in2out();
+      }
+      return this.stack_o.pop();
+    };
+
+    /**
+     * @return {number}
+     */
+    MyQueue.prototype.peek = function () {
+      if (!this.stack_o.length) {
+        this.in2out();
+      }
+      return this.stack_o[this.stack_o.length - 1];
+    };
+
+    /**
+     * @return {boolean}
+     */
+    MyQueue.prototype.empty = function () {
+      return this.stack_i.length === 0 && this.stack_o.length === 0;
+    };
+
+    MyQueue.prototype.in2out = function () {
+      while (this.stack_i.length) {
+        this.stack_o.push(this.stack_i.pop());
+      }
+    };
+    /**
+     * Your MyQueue object will be instantiated and called as such:
+     * var obj = new MyQueue()
+     * obj.push(x)
+     * var param_2 = obj.pop()
+     * var param_3 = obj.peek()
+     * var param_4 = obj.empty()
+     */
+
+    // 手写题：https://bigfrontend.dev/zh/problem/the-angle-between-hour-hand-and-minute-hand-of-a-clock
     // 132. 时钟的时针和分针的角度
+
+    // 思路
+    // 以12点为界限来计算角度，首先计算时针到12点的角度，就等于整数点数模12（因为12应该取0）加上分钟/60在乘上360/12。比如12:30 就是(0+1/2)360/12=15度。
+    // 在计算分钟到12点的角度，就是分钟数360/60。之后求这两个角度差的绝对值就是夹角，如果夹角大于180则再求一次补角返回即可。
+
+    /**
+     * @param {string} time
+     * @returns  {number}
+     */
+
+    function angle(time) {
+      let hour = time.split(":")[0];
+      let minutes = time.split(":")[1];
+      let oneMinAngle = 6; // 每分钟移动6度
+      let oneHourAngle = 30; // 每小时移动30度
+
+      // 时针移动的角度 防止12点 所以hour % 12
+      let hourAngle = ((hour % 12) + minutes / 60) * oneHourAngle;
+      // 分针移动的角度
+      let minutesAngle = oneMinAngle * minutes;
+
+      let diff = Math.abs(hourAngle - minutesAngle); //时针的角度-分针的角度，得到绝对值
+      return Math.round(Math.min(diff, 360 - diff)); // 四舍五入
+    }
   </script>
 </html>
