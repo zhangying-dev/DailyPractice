@@ -1,0 +1,65 @@
+<!--
+ * @Author: Ying Zhang
+ * @Date: 2021-11-19 15:06:51
+ * @LastEditTime: 2021-11-19 15:53:51
+ * @LastEditors: Ying Zhang
+ * @Description: 
+ * @FilePath: /每日一题/11.19.html
+ * 道阻且长，行则将至
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 手写题：https://bigfrontend.dev/zh/problem/implement-Object.is
+    // JavaScript中Object.is的实现;
+    // Object.is() 方法判断两个值是否为同一个值。 返回Boolean
+    // Object.is不会转换被比较的两个值的类型，这点和===更为相似，他们之间也存在一些区别。
+    // 1. NaN在===中是不相等的，而在Object.is中是相等的
+    // 2. +0和-0在===中是相等的，而在Object.is中是不相等的
+
+    // x === y  当前情况下，只有一种情况是特殊的，即 +0 -0
+    // 如果 x !== 0，则返回true
+    // 如果 x === 0，则需要判断+0和-0，则可以直接使用 1/+0 === Infinity 和 1/-0 === -Infinity来进行判断  +0 != -0
+
+    // x !== y 的情况下，只需要判断是否为NaN，如果x!==x，则说明x是NaN，同理y也一样
+    // x和y同时为NaN时，返回true   NaN == NaN
+
+    if (!Object.is) {
+      Object.is = function (x, y) {
+        if (x === y) {
+          return x !== 0 || 1 / x === 1 / y;
+        } else {
+          return x !== x && y !== y;
+        }
+      };
+    }
+
+    // 算法题：https://leetcode-cn.com/problems/decode-string/
+    // 算法：394 字符串解码
+    // 给定一个经过编码的字符串，返回它解码后的字符串。
+
+    // 编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
+
+    // 你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。
+    // 此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2[4] 的输入。
+
+    // 输入：s = "2[abc]3[cd]ef"
+    // 输出："abcabccdcdcdef"
+
+    /**
+     * @param {string} s
+     * @return {string}
+     */
+    var decodeString = function (s) {};
+
+    let str = "2[abc]3[cd]ef";
+    decodeString(str);
+  </script>
+</html>
