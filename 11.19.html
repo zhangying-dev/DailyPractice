@@ -1,7 +1,7 @@
 <!--
  * @Author: Ying Zhang
  * @Date: 2021-11-19 15:06:51
- * @LastEditTime: 2021-11-19 15:53:51
+ * @LastEditTime: 2021-11-25 14:59:19
  * @LastEditors: Ying Zhang
  * @Description: 
  * @FilePath: /每日一题/11.19.html
@@ -17,6 +17,63 @@
   </head>
   <body></body>
   <script>
+    // 算法题：https://leetcode-cn.com/problems/decode-string/
+    // 算法：394 字符串解码
+    // 给定一个经过编码的字符串，返回它解码后的字符串。
+
+    // 编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
+
+    // 你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。
+    // 此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2[4] 的输入。
+
+    // 输入：s = "2[abc]3[cd]ef"
+    // 输出："abcabccdcdcdef"
+
+    /**
+     * @param {string} s
+     * @return {string}
+     */
+    const type = {
+      isAlpha: (s) => /[a-z]/i.test(s), // 字母
+      isDigit: (s) => /[0-9]/.test(s), // 数字
+      isOpenBracket: (s) => s === "[",
+      isCloseBracket: (s) => s === "]",
+    };
+    var decodeString = function (s, i = 0) {
+      // 从i开始遍历
+      let res = "", // 返回结果
+        count = 0; // 累计次数
+      while (i < s.length) {
+        if (type.isAlpha(s[i])) {
+          // 普通字符直接拼接
+          res += s[i];
+          i++;
+        } else if (type.isDigit(s[i])) {
+          // 数字 拼接到重复次数
+          count += s[i];
+          i++;
+        } else if (type.isOpenBracket(s[i])) {
+          // "[" 遇到开括号 把括号内的字符串 重复 count 次 ，再拼接到res
+          // 括号内的嵌套括号 用递归处理
+          // 从递归中取回[括号内解析后的模式，开括号对应的右括号的下标，下次遍历从这个下标+1开始]
+          let [pattern, nextIndex] = decodeString(s, i + 1);
+          // 字符串重复后 拼接
+          res += pattern.repeat(Number(count));
+          count = 0;
+          i = nextIndex;
+          continue;
+        } else if (type.isCloseBracket(s[i])) {
+          // "]" 闭括号 括号内执行结束
+          // 递归结束 返回[解析后的字符串， 解析到的字符下标]
+          return [res, i + 1];
+        }
+      }
+      return res;
+    };
+
+    let str = "2[abc]3[cd]ef";
+    decodeString(str);
+
     // 手写题：https://bigfrontend.dev/zh/problem/implement-Object.is
     // JavaScript中Object.is的实现;
     // Object.is() 方法判断两个值是否为同一个值。 返回Boolean
@@ -40,26 +97,5 @@
         }
       };
     }
-
-    // 算法题：https://leetcode-cn.com/problems/decode-string/
-    // 算法：394 字符串解码
-    // 给定一个经过编码的字符串，返回它解码后的字符串。
-
-    // 编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
-
-    // 你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。
-    // 此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2[4] 的输入。
-
-    // 输入：s = "2[abc]3[cd]ef"
-    // 输出："abcabccdcdcdef"
-
-    /**
-     * @param {string} s
-     * @return {string}
-     */
-    var decodeString = function (s) {};
-
-    let str = "2[abc]3[cd]ef";
-    decodeString(str);
   </script>
 </html>
