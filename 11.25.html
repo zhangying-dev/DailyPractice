@@ -1,0 +1,43 @@
+<!--
+ * @Author: Ying Zhang
+ * @Date: 2021-11-25 10:57:38
+ * @LastEditTime: 2021-11-25 11:47:45
+ * @LastEditors: Ying Zhang
+ * @Description: 
+ * @FilePath: /每日一题/11.25.html
+ * 道阻且长，行则将至
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 算法题：https://leetcode-cn.com/problems/swap-nodes-in-pairs/
+    // 24. 两两交换链表中的节点
+
+    // 手写题：https://bigfrontend.dev/zh/problem/implement-your-own-Object-create
+    // 94. 实现`Object.create`
+    /**
+     * @param {any} proto
+     * @return {object}
+     */
+    function myObjectCreate(proto) {
+      if (typeof proto !== "object" && typeof proto !== "function") {
+        throw new TypeError("对象y原型是一个对象" + proto);
+      } else if (proto === null) {
+        throw new TypeError("实现这个方法，不支持null作为参数");
+      }
+      // function F() {
+      //   F.prototype = proto;
+      // }
+      let object = {};
+      object.__proto__ = proto;
+      return object;
+    }
+  </script>
+</html>

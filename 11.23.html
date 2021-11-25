@@ -1,7 +1,7 @@
 <!--
  * @Author: Ying Zhang
  * @Date: 2021-11-23 16:03:26
- * @LastEditTime: 2021-11-23 16:06:16
+ * @LastEditTime: 2021-11-25 12:41:48
  * @LastEditors: Ying Zhang
  * @Description: 
  * @FilePath: /每日一题/11.23.html
@@ -22,5 +22,133 @@
 
     // 手写题：https://bigfrontend.dev/zh/problem/implement-your-own-URLSearchParams
     // 80. 实现URLSearchParams
+    class MyURLSearchParams {
+      /**
+       * @params {string} init
+       */
+      array;
+      constructor(init) {
+        this.array = [];
+        init = init[0] === "?" ? init.slice(1) : init;
+        const arr = init.split("&");
+        arr.forEach((item) => {
+          this.array.push([item.split("=")[0], item.split("=")[1]]);
+        });
+      }
+
+      /**
+       * @params {string} name
+       * @params {any} value
+       */
+      append(name, value) {
+        this.array.push([name, "" + value]);
+      }
+
+      /**
+       * @params {string} name
+       */
+      delete(name) {
+        let index = this.array.findIndex((item) => item[0] === name);
+        while (index >= 0) {
+          this.array.splice(index, 1);
+          index = this.array.findIndex((item) => item[0] === name);
+        }
+      }
+
+      /**
+       * @returns {Iterator}
+       */
+      *entries() {
+        for (let i = 0; i < this.array.length; i++) {
+          yield [this.array[i][0], this.array[i][1]];
+        }
+      }
+
+      /**
+       * @param {(value, key) => void} callback
+       */
+      forEach(callback) {
+        this.array.forEach((item) => {
+          callback.apply(this, [item[1], item[0]]);
+        });
+      }
+
+      /**
+       * @param {string} name
+       * returns the first value of the name
+       */
+      get(name) {
+        const index = this.array.findIndex((item) => item[0] === name);
+        return index > -1 ? this.array[index][1] : null;
+      }
+
+      /**
+       * @param {string} name
+       * @return {string[]}
+       * returns the value list of the name
+       */
+      getAll(name) {
+        const all = [];
+        this.array.forEach((item) => {
+          if (item[0] === name) {
+            all.push(item[1]);
+          }
+        });
+        return all;
+      }
+
+      /**
+       * @params {string} name
+       * @return {boolean}
+       */
+      has(name) {
+        return this.array.findIndex((item) => item[0] === name) >= 0;
+      }
+
+      /**
+       * @return {Iterator}
+       */
+      keys() {
+        return this.array.map((item) => item[0]);
+      }
+
+      /**
+       * @param {string} name
+       * @param {any} value
+       */
+      set(name, value) {
+        const index = this.array.findIndex((item) => item[0] === name);
+        this.delete(name);
+        this.array.splice(index, 0, [name, "" + value]);
+      }
+
+      // sor all key/value pairs based on the keys
+      sort() {
+        this.array.sort((item1, item2) => {
+          if (item1[0] > item2[0]) {
+            return 1;
+          } else {
+            return -1;
+          }
+        });
+      }
+
+      /**
+       * @return {string}
+       */
+      toString() {
+        const results = this.array.map((item) => {
+          return `${item[0]}=${item[1]}`;
+        });
+        return results.join("&");
+      }
+
+      /**
+       * @return {Iterator} values
+       */
+      values() {
+        return this.array.map((item) => item[1]);
+      }
+    }
   </script>
 </html>

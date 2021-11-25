@@ -1,0 +1,61 @@
+<!--
+ * @Author: Ying Zhang
+ * @Date: 2021-11-25 09:57:40
+ * @LastEditTime: 2021-11-25 10:55:17
+ * @LastEditors: Ying Zhang
+ * @Description: 
+ * @FilePath: /每日一题/11.24.html
+ * 道阻且长，行则将至
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 算法题：https://leetcode-cn.com/problems/rotate-list/
+    // 61. 旋转链表
+    /**
+     * Definition for singly-linked list.
+     * function ListNode(val, next) {
+     *     this.val = (val===undefined ? 0 : val)
+     *     this.next = (next===undefined ? null : next)
+     * }
+     */
+    /**
+     * @param {ListNode} head
+     * @param {number} k
+     * @return {ListNode}
+     */
+    var rotateRight = function (head, k) {
+      if (k === 0 || !head || !head.next) {
+        return head;
+      }
+      let n = 1;
+      let cur = head;
+      // 计算链表的长度
+      while (cur.next) {
+        cur = cur.next;
+        n++;
+      }
+      let add = n - (k % n);
+      if (add === n) {
+        return head;
+      }
+      cur.next = head;
+      while (add) {
+        cur = cur.next;
+        add--;
+      }
+      let ret = cur.next;
+      cur.next = null;
+			return ret
+    };
+
+    // 手写题：请用你全部能展现能力的纯CSS+Vue3代码实现该设计稿件（注：loading条根据初始化数据动态展现，且需完成动画部分同时请注意边框细节）
+  </script>
+</html>
