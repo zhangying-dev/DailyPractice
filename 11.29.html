@@ -1,0 +1,106 @@
+<!--
+ * @Author: Ying Zhang
+ * @Date: 2021-11-29 11:32:09
+ * @LastEditTime: 2021-11-29 14:36:25
+ * @LastEditors: Ying Zhang
+ * @Description: 
+ * @FilePath: /每日一题/11.29.html
+ * 道阻且长，行则将至
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      #wrap {
+        position: absolute;
+        top: 100px;
+        left: 100px;
+        width: 300px;
+      }
+      #bar {
+        height: 50px;
+        line-height: 50px;
+        color: white;
+        background-color: #d5a1ff;
+        cursor: move;
+        text-align: center;
+        border-radius: 10px 10px 0px 0px;
+      }
+      #content {
+        height: 200px;
+        background-color: #eddaff;
+        border-radius: 0px 0px 10px 10px;
+        text-align: center;
+        box-sizing: border-box;
+        padding: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrap">
+      <div id="bar">我是可以拖拽的</div>
+      <div id="content">今天天气不错，挺风和日丽的</div>
+    </div>
+  </body>
+  <script>
+    // 手写题：实现一个可以拖拽的DIV
+    // 参考地址：
+    // http://blog.csdn.net/twoByte/article/details/73269653
+    // http://www.cnblogs.com/zhuzhenwei918/p/6569295.html
+    // https://blog.csdn.net/liangxw1/article/details/79470552
+    /*
+     * js实现div可拖拽
+     * @params bar 可以点击拖动的元素
+     * @params wrap 拖动的整体元素 必须是position: absolute;
+     * 思想：鼠标的clienX/clientY相对值设置为父元素的left/top的相对值
+     */
+    const dragBox = function (drag, wrap) {
+      function getCss(ele, prop) {
+        return parseInt(window.getComputedStyle(ele)[prop]);
+      }
+      let initX,
+        initY,
+        dragAble = false,
+        wrapLeft = getCss(wrap, "left"),
+        wrapTop = getCss(wrap, "top");
+      drag.addEventListener(
+        "mousedown",
+        function (e) {
+          dragAble = true;
+          initX = e.clientX;
+          initY = e.clientY;
+        },
+        false
+      );
+      document.addEventListener("mousemove", function (e) {
+        if (!dragAble) {
+          return;
+        } else {
+          let nowX = e.clientX,
+            nowY = e.clientY,
+            disX = nowX - initX,
+            disY = nowY - initY;
+          wrap.style.left = wrapLeft + disX + "px";
+          wrap.style.top = wrapTop + disY + "px";
+        }
+      });
+      drag.addEventListener("mouseup", function (e) {
+        dragAble = false;
+        wrapLeft = getCss(wrap, "left");
+        wrapTop = getCss(wrap, "top");
+      });
+    };
+    dragBox(document.querySelector("#bar"), document.querySelector("#wrap"));
+
+    // 算法题： https://leetcode-cn.com/problems/intersection-of-two-linked-lists/
+    // 160. 相交链表
+  </script>
+</html>
