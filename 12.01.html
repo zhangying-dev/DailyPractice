@@ -1,7 +1,7 @@
 <!--
  * @Author: Ying Zhang
  * @Date: 2021-12-01 11:04:48
- * @LastEditTime: 2021-12-01 13:35:39
+ * @LastEditTime: 2021-12-01 14:12:45
  * @LastEditors: Ying Zhang
  * @Description: 
  * @FilePath: /每日一题/12.01.html
@@ -19,23 +19,59 @@
   <script>
     // 算法题：https://leetcode-cn.com/problems/lru-cache/
     // 146. LRU 缓存机制
+    // 运用你所掌握的数据结构，设计和实现一个  LRU (最近最少使用) 缓存机制。它应该支持以下操作： 获取数据 get 和 写入数据 put 。
+
+    // 获取数据 get(key) - 如果关键字 (key) 存在于缓存中，则获取关键字的值（总是正数），否则返回 -1。
+    // 写入数据 put(key, value) - 如果关键字已经存在，则变更其数据值；如果关键字不存在，则插入该组「关键字/值」。当缓存容量达到上限时，它应该在写入新数据之前删除最久未使用的数据值，从而为新的数据值留出空间。
+
+    // 解题思路
+
+    // 创建map来保存数据
+    // get：访问某key，访问完要将其放在最后的。若key存在，先保存value值，删除key，再添加key，最后返回保存的value值。若key不存在，返回-1
+    // put：新加一个key，要将其放在最后的。所以，若key已经存在，先删除，再添加。如果容量超出范围了，将map中的头部删除。
+    // 如何删除map中的头部key：
+
+    // map.keys()返回一个迭代器
+    // 这个迭代器调用next()方法，返回包含迭代器返回的下一个值，存在value属性中
+    // 具体迭代器查看[MDN——迭代器](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Iterators_and_Generators)
+
     /**
      * @param {number} capacity
      */
-    var LRUCache = function (capacity) {};
+    var LRUCache = function (capacity) {
+      this.capacity = capacity;
+      this.cahce = new Map();
+    };
 
     /**
      * @param {number} key
      * @return {number}
      */
-    LRUCache.prototype.get = function (key) {};
+    LRUCache.prototype.get = function (key) {
+      if (this.cahce.has(key)) {
+        let value = this.cahce.get(key);
+        this.cahce.delete(key);
+        this.cahce.set(key, value);
+        return value;
+      } else {
+        return -1;
+      }
+    };
 
     /**
      * @param {number} key
      * @param {number} value
      * @return {void}
      */
-    LRUCache.prototype.put = function (key, value) {};
+    LRUCache.prototype.put = function (key, value) {
+      if (this.cahce.has(key)) {
+        this.cahce.delete(key);
+      }
+      this.cahce.set(key, value);
+      if (this.cahce.size > this.capacity) {
+        this.cahce.delete(this.cahce.keys().next().value);
+      }
+    };
 
     /**
      * Your LRUCache object will be instantiated and called as such:
@@ -113,7 +149,5 @@
         }
       });
     }
-
-    // 扩展阅读https://juejin.cn/post/6844903568751722509
   </script>
 </html>
