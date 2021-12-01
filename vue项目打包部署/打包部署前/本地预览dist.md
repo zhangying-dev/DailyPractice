@@ -1,12 +1,14 @@
 <!--
  * @Author: Ying Zhang
  * @Date: 2021-12-01 15:39:04
- * @LastEditTime: 2021-12-01 16:51:35
+ * @LastEditTime: 2021-12-01 17:02:37
  * @LastEditors: Ying Zhang
  * @Description:
  * @FilePath: /everyday/vue项目打包部署/打包部署前/本地预览dist.md
  * 道阻且长，行则将至
 -->
+
+# 本地预览 dist
 
 1. dist 目录需要启动一个 HTTP 服务器来访问 (除非你已经将 publicPath 配置为了一个相对的值)，所以以 file:// 协议直接打开 dist/index.html 是不会工作的。在本地预览生产环境构建最简单的方式就是使用一个 Node.js 静态文件服务器，例如 [serve](https://github.com/vercel/serve)：
 
