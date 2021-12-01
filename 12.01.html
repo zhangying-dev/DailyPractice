@@ -1,0 +1,117 @@
+<!--
+ * @Author: Ying Zhang
+ * @Date: 2021-12-01 11:04:48
+ * @LastEditTime: 2021-12-01 11:43:58
+ * @LastEditors: Ying Zhang
+ * @Description: 
+ * @FilePath: /每日一题/12.01.html
+ * 道阻且长，行则将至
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 算法题：https://leetcode-cn.com/problems/lru-cache/
+    // 146. LRU 缓存机制
+    /**
+     * @param {number} capacity
+     */
+    var LRUCache = function (capacity) {};
+
+    /**
+     * @param {number} key
+     * @return {number}
+     */
+    LRUCache.prototype.get = function (key) {};
+
+    /**
+     * @param {number} key
+     * @param {number} value
+     * @return {void}
+     */
+    LRUCache.prototype.put = function (key, value) {};
+
+    /**
+     * Your LRUCache object will be instantiated and called as such:
+     * var obj = new LRUCache(capacity)
+     * var param_1 = obj.get(key)
+     * obj.put(key,value)
+     */
+
+    // 手写题：https://bigfrontend.dev/problem/implement-Promise-race
+    // 35. 实现`Promise.race()`
+    /**
+     * @param {Array<Promise>} promises
+     * @return {Promise}
+     */
+    function race(promises) {
+      // your code here
+      return new Promise((resolve, reject) => {
+        if (promises.length == 0) {
+          return reject("请传入promise");
+        }
+        let isFulfilled = false;
+        for (let i = 0; i < promises.length; i++) {
+          promises[i]
+            .then((res) => {
+              if (!isFulfilled) {
+                resolve(res); //某一promise完成后直接返回其值
+                isFulfilled = true;
+              }
+            })
+            .catch((e) => {
+              reject(e); //如果有错误则直接结束循环，并返回错误
+            });
+        }
+      });
+    }
+
+    // >>>>Promise.all和Promise.race的介绍   （两种状态：fulfilled或者rejected）
+    // 相似点:
+    // 这两个都是Promise的方法，并且传入的参数都是一个Promise的数组。
+    // 都会返回一个Promise实例
+    // 区别:
+    // all: 传入的所有Promise最终都转化为fulfilled态时，则会执行resolve回调，并将返回值是的所有的Promise的resolve的回调的value的数组。其中一个任何Promise为reject状态时，则返回的Promise的状态更改为rejected。
+    // race: 传入的所有Promise其中任何一个有状态转化为fulfilled或者rejected，则将执行对应的回调。
+
+    // >>>>传入空数组
+    // 当我们的all和race传入的是空数组时，会有出现什么状况呢?
+    // all: 返回一个状态是resovle的promise对象
+    // race: 返回的Promise会一直保持在pending状态
+
+    // >>>>使用场景
+    // 当用户想要得到的是多个异步结果合并到一起时应该使用all
+    // 当我们想要控制某一个异步操作的时间时，就可以用定时器和race来进行实现。
+
+    // 补充 Promise.all 手写
+    function all(promises) {
+      return new Promise((resolve, reject) => {
+        let length = promises.length;
+        let resList = [];
+        let count = 0;
+        if (length === 0) {
+          return reject("请输入promises");
+        }
+        for (let i = 0; i < length; i++) {
+          promises[i]
+            .then((res) => {
+              count++;
+              resList[i] = res;
+              if (count === length) {
+                return resolve(resList);
+              }
+            })
+            .catch((err) => {
+              reject(err);
+            });
+        }
+      });
+    }
+  </script>
+</html>
