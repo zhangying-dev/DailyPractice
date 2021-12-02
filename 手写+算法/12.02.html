@@ -1,0 +1,269 @@
+<!--
+ * @Author: Ying Zhang
+ * @Date: 2021-12-02 11:37:01
+ * @LastEditTime: 2021-12-02 17:50:56
+ * @LastEditors: Ying Zhang
+ * @Description: 
+ * @FilePath: /everyday/手写+算法/12.02.html
+ * 道阻且长，行则将至
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 算法题：https://leetcode-cn.com/problems/maximum-depth-of-binary-tree
+    // 104. 二叉树的最大深度
+    /**
+     * Definition for a binary tree node.
+     * function TreeNode(val, left, right) {
+     *     this.val = (val===undefined ? 0 : val)
+     *     this.left = (left===undefined ? null : left)
+     *     this.right = (right===undefined ? null : right)
+     * }
+     */
+    /**
+     * @param {TreeNode} root
+     * @return {number}
+     */
+    var maxDepth = function (root) {
+      if (!root) {
+        return 0;
+      } else {
+        let left = maxDepth(root.left);
+        let right = maxDepth(root.right);
+        return Math.max(left, right) + 1;
+      }
+    };
+
+    // 手写题：https://bigfrontend.dev/zh/problem/immerjs
+
+    // [immer.js 简介及源码简析：更简单，更快速的创建不可变数据类型]
+    // https://zhangzhao.name/posts/immer-immutable/
+    // [150 行代码，手搓一个 Immer]https://cloud.tencent.com/developer/article/1546210
+
+    type ProduceFunc = <T>(base: T, receipe: (draft: T) => any) => void;
+
+    const proxify = (
+      data: any,
+      updaters: Array<(val: any) => any> = []
+    ): any => {
+      return new Proxy(data, {
+        // create clones in get, as only needed
+        // but only link them in set traps, in order to avoid unnecessary cloning.
+        get: function (target, key) {
+          const val = Reflect.get(target, key);
+
+          // if function met, meaning prototype functions on Array here in our scope
+          if (Object(val) === val && !(val instanceof Function)) {
+            // object
+            const clone = Array.isArray(val) ? [...val] : { ...val };
+            const updater = (newVal: any) => {
+              console.log("updater", key);
+              target[key] = newVal;
+              return target;
+            };
+            const proxy = proxify(clone, [...updaters, updater]);
+            return proxy;
+          } else {
+            // primitive
+            return val;
+          }
+        },
+
+        // when data changes, link clones up
+        set: function (target, key, value) {
+          const prevVal = Reflect.get(target, key);
+          if (prevVal !== value) {
+            target[key] = value;
+            updaters.reduceRight((result, updater) => updater(result), target);
+          }
+          return true;
+        },
+
+        // when data changes, link clones up
+        deleteProperty: function (target, key) {
+          const deleted = Reflect.deleteProperty(target, key);
+          if (deleted) {
+            updaters.reduceRight((result, updater) => updater(result), target);
+          }
+          return deleted;
+        },
+      });
+    };
+
+    const produce: ProduceFunc = (base, recipe) => {
+      // proxy
+      const root = {
+        result: base,
+      };
+
+      const proxy = proxify(root);
+      recipe(proxy.result);
+
+      return root.result;
+    };
+
+    // const myStructure = {
+    //   a: [1, 2, 3],
+    //   b: 0,
+    // };
+
+    // const copy = produce(myStructure, () => {});
+    // const modified = produce(myStructure, (myStructure) => {
+    //   // 1.在producer函数中访问draftState，就像访问原值currentState一样
+    //   myStructure.a.push(4);
+    //   myStructure.b++;
+    // });
+
+    // // 2.producer中不修改draftState的话，引用不变，都指向原值
+    // copy === myStructure; // true
+    // // 3.改过draftState的话，引用发生变化，produce()返回新值
+    // modified !== myStructure; // true
+    // // 4.producer函数中对draftState的操作都会应用到新值上
+    // JSON.stringify(modified) === JSON.stringify({ a: [1, 2, 3, 4], b: 1 }); // true
+    // // 5.producer函数中对draftState的操作不影响原值
+    // JSON.stringify(myStructure) === JSON.stringify({ a: [1, 2, 3], b: 0 }); // true
+
+    // 思路：
+    // function produce(currentState, producer) {
+    //   const copy = null;
+    //   const draftState = new Proxy(currentState, {
+    //     get() {
+    //       // 把读的操作代理到原值上
+    //     },
+    //     set() {
+    //       if (!mutated) {
+    //         mutated = true;
+    //         // 创建拷贝值
+    //       }
+    //       // 把写的操作代理到拷贝值上
+    //     },
+    //   });
+    //   producer(draftState);
+    //   return copy || currentState;
+    // }
+
+    // /**
+    //  * @param {any} base
+    //  * @param {(draft: any) => any} recipe
+    //  * @returns {any}
+    //  */
+    // function produce(base, recipe) {
+    //   const draft = proxy(base);
+    //   // 修改draft
+    //   recipe(draft);
+    //   // 取出draft内部状态
+    //   const { originalValue, draftValue, mutated } = draft[INTERNAL_STATE_KEY];
+    //   // 将改过的新值patch上去
+    //   const next = mutated ? draftValue : originalValue;
+    //   return next;
+    // }
+    // const INTERNAL_STATE_KEY = Symbol("state");
+    // function proxy(original, onWrite) {
+    //   // 存放代理关系及拷贝值
+    //   let draftState = {
+    //     originalValue: original,
+    //     draftValue: Array.isArray(original)
+    //       ? []
+    //       : Object.create(Object.getPrototypeOf(original)),
+    //     mutated: false,
+    //     onWrite,
+    //   };
+
+    //   // 创建根节点代理
+    //   const draft = new Proxy(original, {
+    //     // 读操作（代理属性访问）
+    //     get(target, key, receiver) {
+    //       // 建立proxy 到draft值的关联
+    //       if (key === INTERNAL_STATE_KEY) {
+    //         return draftState;
+    //       }
+    //       if (typeof original[key] === "object" && original[key] !== null) {
+    //         // 不为基本值类型的现有属性，创建下一层代理
+    //         return proxyProp(original[key], key, draftState, onWrite);
+    //       } else {
+    //         // 改过直接从draft取最新状态
+    //         if (draftState.mutated) {
+    //           return draftValue[key];
+    //         }
+    //         // 不存在的，或者值为基本值的现有属性，代理到原值
+    //         return Reflect.get(target, key, receiver);
+    //       }
+    //     },
+    //     // 写操作 （代理数据修改）
+    //     set(target, key, value) {
+    //       // 如果新值不为基本值类型，创建下一层代理
+    //       if (typeof value === "object") {
+    //         proxyProp(value, key, draftState, onWrite);
+    //       }
+    //       // 第一次写时复制
+    //       copyOnWrite(draftState);
+    //       // 复制过了。直接写
+    //       draftValue[key] = value;
+    //       return true;
+    //     },
+    //   });
+    //   return draft;
+    // }
+
+    // function copyOnWrite(draftState) {
+    //   const { originalValue, draftValue, mutated, onWrite } = draftState;
+    //   if (!mutated) {
+    //     draftState.mutated = true;
+    //     // 下一层有修改时才往父级 draftValue 上挂
+    //     if (onWrite) {
+    //       onWrite(draftValue);
+    //     }
+    //     // 第一次写的时候复制
+    //     copyProps(draftValue, originalValue);
+    //   }
+    // }
+
+    // // 拷贝
+    // function copyProps(target, source) {
+    //   if (Array.isArray(target)) {
+    //     for (let i = 0; i < source.length; i++) {
+    //       // 跳过在更深层被改过的属性
+    //       if (!(i in target)) {
+    //         target[i] = source[i];
+    //       }
+    //     }
+    //   } else {
+    //     // Reflect.ownKeys能够返回对象的所有属性名（包括 Symbol 属性名和字符串属性名）
+    //     Reflect.ownKeys(source).forEach((key) => {
+    //       const desc = Object.getOwnPropertyDescriptor(source, key);
+    //       // 跳过已有的属性
+    //       if (!(key in target)) {
+    //         Object.defineProperty(target, key, desc);
+    //       }
+    //     });
+    //   }
+    // }
+    // // 创建下一层代理
+    // function proxyProp(propValue, propKey, hostDraftState) {
+    //   const { originalValue, draftValue, onWrite } = hostDraftState;
+    //   // 下一层属性发生写操作时
+    //   const onPropWrite = (value) => {
+    //     // 按需创建父级拷贝值
+    //     if (!draftValue.mutated) {
+    //       hostDraftState.mutated = true;
+    //       // 拷贝host所有属性
+    //       copyProps(draftValue, originalValue);
+    //     }
+    //     // 将子级拷贝值挂上去（建立拷贝值的父子关系）
+    //     draftValue[propKey] = value;
+    //     // 通知祖先，向上建立完整拷贝值树
+    //     if (onWrite) {
+    //       onWrite(draftValue);
+    //     }
+    //   };
+    //   return proxy(propValue, onPropWrite);
+    // }
+  </script>
+</html>
