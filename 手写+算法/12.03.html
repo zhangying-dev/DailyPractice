@@ -1,7 +1,7 @@
 <!--
  * @Author: Ying Zhang
  * @Date: 2021-12-04 09:18:07
- * @LastEditTime: 2021-12-04 09:19:42
+ * @LastEditTime: 2021-12-04 14:14:58
  * @LastEditors: Ying Zhang
  * @Description: 
  * @FilePath: /每日一题/手写+算法/12.03.html
@@ -19,8 +19,148 @@
   <script>
     // 算法题：https://leetcode-cn.com/problems/same-tree/
     // 100. 相同的树
+    /**
+     * Definition for a binary tree node.
+     * function TreeNode(val, left, right) {
+     *     this.val = (val===undefined ? 0 : val)
+     *     this.left = (left===undefined ? null : left)
+     *     this.right = (right===undefined ? null : right)
+     * }
+     */
+    /**
+     * @param {TreeNode} p
+     * @param {TreeNode} q
+     * @return {boolean}
+     */
+    var isSameTree = function (p, q) {
+      if (p === null && q === null) {
+        return true;
+      }
+      if (p == null || q == null) {
+        return false;
+      }
+      if (p.val !== q.val) {
+        return false;
+      }
+      return isSameTree(p.left, q.left) & isSameTree(p.right, q.right);
+    };
 
     // 手写题：https://bigfrontend.dev/zh/problem/virtual-dom-v-jsx-2
-		// 150. Virtual DOM V - JSX 2
+    // 150. Virtual DOM V - JSX 2
+
+    /**
+     * @param {code} string
+     * @returns {any} AST
+     */
+    function checkForClosing(str, i) {
+      if (str[i] == "/") return true;
+      if (str[i] == ">") return false;
+      return checkForClosing(str, i + 1);
+    }
+
+    function parseChild(str) {
+      // str = str.trim();
+      let child = [];
+      let text = "";
+      for (var i = 0; i < str.length; i++) {
+        if (str[i] == "<" && checkForClosing(str, i)) {
+          break;
+        }
+        if (str[i] == "<") {
+          let newStr = str.slice(i);
+          const result = parse(newStr);
+          child.push(text);
+          child.push(result);
+          i += result.endClosing;
+          text = "";
+          continue;
+        } else {
+          text += str[i];
+        }
+      }
+      child.push(text);
+      const nextTag = i;
+      if (nextTag == 0) return [null, nextTag];
+      return [child, nextTag];
+    }
+
+    function parseTag(str) {
+      let isClosing = false;
+      let closeOpening = str.indexOf(">");
+      let tag = str.slice(1, closeOpening).trim();
+
+      if (tag[0] == "/") {
+        isClosing = true;
+        tag = tag.slice(1).trim();
+      }
+
+      return [tag, closeOpening, isClosing];
+    }
+
+    function parse(code) {
+      // your code here
+      code = code.trim();
+      if (code[0] !== "<" || code[code.length - 1] !== ">") {
+        throw new Error("");
+      }
+      if (code.split("<").length !== code.split(">").length) {
+        throw new Error("");
+      }
+
+      let i = 1;
+      var [opening, endOpening, isClosing] = parseTag(code, i);
+      code = code.substr(endOpening + 1, code.length);
+      i += endOpening;
+
+      var [child, endChild] = parseChild(code, i);
+      code = code.substr(endChild, code.length);
+      i += endChild;
+
+      var [closing, endClosing, isClosing] = parseTag(code, i);
+      code = code.substr(endClosing + 1, code.length);
+      i += endClosing;
+
+      if (!isClosing) throw new Error("Closing element not found");
+      if (opening !== closing) {
+        throw new Error("Opening and closing doesn't match");
+      }
+
+      let res = {
+        opening,
+        child: [child],
+        closing,
+        endClosing: i,
+      };
+      return res;
+    }
+
+    /**
+     * @param {any} your AST
+     * @returns {string}
+     */
+    function generate(ast) {
+      // your code here
+
+      if (ast.child[0] == null) {
+        return h(`${ast.opening}`, null);
+      } else {
+        let childrens = ast.child[0];
+        let newChildrens = [];
+        for (let i = 0; i < childrens.length; i++) {
+          if (childrens[i] instanceof Object) {
+            newChildrens.push(generate(childrens[i]));
+          } else {
+            childrens[i] != "" && newChildrens.push(childrens[i]);
+          }
+        }
+        let opening;
+        if (`${ast.opening}`[0] == `${ast.opening}`[0].toUpperCase()) {
+          opening = Heading;
+        } else {
+          opening = `${ast.opening}`;
+        }
+        return h(opening, null, ...newChildrens);
+      }
+    }
   </script>
 </html>
