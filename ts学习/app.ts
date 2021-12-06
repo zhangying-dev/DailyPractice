@@ -1,10 +1,17 @@
 /*
  * @Author: Ying Zhang
  * @Date: 2021-11-23 21:44:43
- * @LastEditTime: 2021-12-02 11:05:16
+<<<<<<< Updated upstream
+ * @LastEditTime: 2021-12-04 09:12:09
  * @LastEditors: Ying Zhang
  * @Description:
- * @FilePath: /everyday/ts学习/app.ts
+ * @FilePath: /每日一题/ts学习/app.ts
+=======
+ * @LastEditTime: 2021-11-28 15:45:40
+ * @LastEditors: Ying Zhang
+ * @Description:
+ * @FilePath: /每日一题/ts学习/app.ts
+>>>>>>> Stashed changes
  * 道阻且长，行则将至
  */
 let myname: string = "zhangying";
@@ -246,4 +253,17 @@ declare var jQuery: (selector: string) => any;
 
 jQuery("#foo");
 
-// TypeScript 引入声明文件语法格式： /// <reference path = " runoob.d.ts" />
+// TypeScript 引入声明文件语法格式： /// <reference path = " runoob.d.ts" /
+type PickCard3 = {
+  (x: { suit: string; card: number }[]): number;
+  (x: number): { suit: string; card: number };
+  (x: string): string;
+};
+
+document.createElement("11");
+
+const init = function (x: string): string {
+  console.log("x: ", x);
+  return "111";
+} as PickCard3;
+init("xx");
