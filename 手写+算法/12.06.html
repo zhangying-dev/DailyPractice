@@ -1,0 +1,66 @@
+<!--
+ * @Author: Ying Zhang
+ * @Date: 2021-12-06 13:35:06
+ * @LastEditTime: 2021-12-06 14:42:17
+ * @LastEditors: Ying Zhang
+ * @Description: 
+ * @FilePath: /everyday/手写+算法/12.06.html
+ * 道阻且长，行则将至
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 1.手写算法：https://leetcode-cn.com/problems/sum-root-to-leaf-numbers/
+    // 129. 求根节点到叶节点数字之和
+    /**
+     * Definition for a binary tree node.
+     * function TreeNode(val, left, right) {
+     *     this.val = (val===undefined ? 0 : val)
+     *     this.left = (left===undefined ? null : left)
+     *     this.right = (right===undefined ? null : right)
+     * }
+     */
+    /**
+     * @param {TreeNode} root
+     * @return {number}
+     */
+    function getSum(node, sum) {
+      if (!node) {
+        return 0;
+      }
+      let res = sum * 10 + node.val;
+      if (!node.left && !node.right) {
+        return res;
+      } else {
+        return getSum(node.left, res) + getSum(node.right, res);
+      }
+    }
+    var sumNumbers = function (root) {
+      return getSum(root, 0);
+    };
+    // 2.手写题：https://bigfrontend.dev/zh/problem/remove-characters
+    // 165.去除字符
+    /**
+     * @param {string} input
+     * @returns string
+     */
+    function removeChars(input) {
+      // your code here
+      let str = input
+        .split("")
+        .filter((item) => item != "b")
+        .join("");
+      while (str.split("ac").length > 1) {
+        str = str.split("ac").join("");
+      }
+      return str;
+    }
+  </script>
+</html>

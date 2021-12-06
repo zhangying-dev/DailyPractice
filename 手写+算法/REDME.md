@@ -1,7 +1,7 @@
 <!--
  * @Author: Ying Zhang
  * @Date: 2021-11-17 09:59:16
- * @LastEditTime: 2021-12-02 17:56:19
+ * @LastEditTime: 2021-12-06 14:27:01
  * @LastEditors: Ying Zhang
  * @Description:
  * @FilePath: /everyday/手写+算法/REDME.md
@@ -42,5 +42,11 @@
     1. 算法：142. 环形链表 II
     2. 手写：实现 Promise.any()
 12. 12.01
+    1. 算法：146. LRU 缓存机制
+    2. 手写：实现 Promise.race()
+13. 12.02
     1. 算法：104. 二叉树的最大深度
     2. 手写：实现 immer.js
+14. 12.06
+    1. 算法：129. 求根节点到叶节点数字之和
+    2. 手写：实现 去除字符
