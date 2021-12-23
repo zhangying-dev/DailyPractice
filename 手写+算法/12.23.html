@@ -1,7 +1,7 @@
 <!--
  * @Author: Ying Zhang
  * @Date: 2021-12-23 10:51:08
- * @LastEditTime: 2021-12-23 10:51:08
+ * @LastEditTime: 2021-12-23 11:24:09
  * @LastEditors: Ying Zhang
  * @Description: 
  * @FilePath: /everyday/手写+算法/12.23.html
@@ -17,7 +17,50 @@
   </head>
   <body></body>
   <script>
+    // Day28手写：
     // 1.手写算法：https://leetcode-cn.com/problems/sliding-window-maximum/
+    // 239. 滑动窗口最大值
+    // 给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。
+
+    // 返回滑动窗口中的最大值。
+
+    function maxSlidingWindow(nums: number[], k: number): number[] {
+      let len: number = nums.length;
+      if (len < k || k == 0) {
+        return [];
+      }
+      let queue: number[] = [];
+      let res: number[] = [];
+
+      for (let i: number = 0; i < k; i++) {
+        doubleQueue(queue, nums, i, k);
+        queue.push(i);
+      }
+      res.push(nums[queue[0]]);
+
+      for (let i = k; i < len; i++) {
+        doubleQueue(queue, nums, i, k);
+        queue.push(i);
+        res.push(nums[queue[0]]);
+      }
+
+      return res;
+    }
+
+    function doubleQueue(
+      queue: number[],
+      nums: number[],
+      i: number,
+      k: number
+    ) {
+      if (queue.length && i >= k + queue[0]) {
+        queue.shift();
+      }
+
+      while (queue.length && nums[i] > nums[queue[queue.length - 1]]) {
+        queue.pop();
+      }
+    }
 
     // 2.手写题: 实现React useMemo原理
   </script>
