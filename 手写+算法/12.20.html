@@ -1,0 +1,65 @@
+<!--
+ * @Author: Ying Zhang
+ * @Date: 2021-12-20 11:50:39
+ * @LastEditTime: 2021-12-20 15:33:42
+ * @LastEditors: Ying Zhang
+ * @Description: 
+ * @FilePath: /手写+算法/12.20.html
+ * 道阻且长，行则将至
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 1.手写算法：https://leetcode-cn.com/problems/middle-of-the-linked-list/
+    // 876. 链表的中间结点
+    // 给定一个头结点为 head 的非空单链表，返回链表的中间结点。
+    // 如果有两个中间结点，则返回第二个中间结点。
+    /**
+     * Definition for singly-linked list.
+     * function ListNode(val, next) {
+     *     this.val = (val===undefined ? 0 : val)
+     *     this.next = (next===undefined ? null : next)
+     * }
+     */
+    // 两个指针 slow 与 fast 一起遍历链表。slow 一次走一步，fast 一次走两步。那么当 fast 到达链表的末尾时，slow 必然位于中间
+    /**
+     * @param {ListNode} head
+     * @return {ListNode}
+     */
+    var middleNode = function (head) {
+      slow = fast = head;
+      while (fast && fast.next) {
+        slow = slow.next;
+        fast = fast.next.next;
+      }
+      return slow;
+    };
+
+    // 2.手写题: https://bigfrontend.dev/zh/problem/two-way-binding
+    // 154. 简单实现双向绑定Two-way binding
+    /**
+     * @param {{value: string}} state
+     * @param {HTMLInputElement} element
+     */
+
+    function model(state, element) {
+      // your code here
+      element.value = state.value;
+      Object.defineProperty(state, "value", {
+        get: () => {
+          return element.value;
+        },
+        set: (value) => {
+          return (element.value = value);
+        },
+      });
+    }
+  </script>
+</html>

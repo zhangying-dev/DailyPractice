@@ -1,10 +1,14 @@
 <!--
  * @Author: Ying Zhang
  * @Date: 2021-11-17 09:59:16
+<<<<<<< HEAD
+ * @LastEditTime: 2021-12-06 14:48:32
+=======
  * @LastEditTime: 2021-12-04 09:20:08
+>>>>>>> 204a039abfe2608e6514a2d76dff67f11afc9d52
  * @LastEditors: Ying Zhang
  * @Description:
- * @FilePath: /每日一题/手写+算法/REDME.md
+ * @FilePath: /everyday/手写+算法/REDME.md
  * 道阻且长，行则将至
 -->
 
@@ -42,10 +46,15 @@
     1. 算法：142. 环形链表 II
     2. 手写：实现 Promise.any()
 12. 12.01
-    1. 算法：24. LRU 缓存机制
+    1. 算法：146. LRU 缓存机制
     2. 手写：实现 Promise.race()
-13. 12.02 1. 算法：104. 二叉树的最大深度 2. 手写：实现 immer.js
-    14
+13. 12.02
+    1. 算法：104. 二叉树的最大深度
+    2. 手写：实现 immer.js
 14. 12.03
     1. 算法：100. 相同的树
     2. 手写：实现 150. Virtual DOM V - JSX 2
+15. 12.06
+    1. 算法：129. 求根节点到叶节点数字之和
+    2. 手写：实现 去除字符
+

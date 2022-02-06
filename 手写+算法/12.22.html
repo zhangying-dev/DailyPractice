@@ -1,0 +1,43 @@
+<!--
+ * @Author: Ying Zhang
+ * @Date: 2021-12-23 10:37:17
+ * @LastEditTime: 2021-12-23 10:48:38
+ * @LastEditors: Ying Zhang
+ * @Description: 
+ * @FilePath: /everyday/手写+算法/12.22.html
+ * 道阻且长，行则将至
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 1.手写算法：https://leetcode-cn.com/problems/search-insert-position
+    // 35. 搜索插入位置
+    // 	给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+    //  请必须使用时间复杂度为 O(log n) 的算法。
+    /**
+     * @param {number[]} nums
+     * @param {number} target
+     * @return {number}
+     */
+    var searchInsert = function (nums, target) {
+      if (target > nums[nums.length - 1]) {
+        return nums.length;
+      }
+      for (let i = 0; i < nums.length; i++) {
+        if (target <= nums[i]) {
+          return i;
+        }
+      }
+      return 0;
+    };
+
+    // 2.手写题: 实现React useCallback原理
+  </script>
+</html>

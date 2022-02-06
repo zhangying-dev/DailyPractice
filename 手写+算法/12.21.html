@@ -1,0 +1,49 @@
+<!--
+ * @Author: Ying Zhang
+ * @Date: 2021-12-21 10:40:38
+ * @LastEditTime: 2021-12-21 12:58:57
+ * @LastEditors: Ying Zhang
+ * @Description: 
+ * @FilePath: /everyday/手写+算法/12.21.html
+ * 道阻且长，行则将至
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // Day26手写：
+    // 1.手写算法：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/
+    // 26. 删除有序数组中的重复项
+    // 给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。
+    // 不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+
+    // 创建一个慢指针 ii，指向数组第一位数字，再创建一个快指针 jj，指向数组第二位。
+    // 若 nums[j]nums[j] 和 nums[i]nums[i] 不等，则先将 ii 递增 11，然后把 nums[i]nums[i] 改为 nums[j]nums[j]。
+    // 因为最初 ii 等于 00 时的数字未统计，所以最终返回结果需要 +1+1。
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var removeDuplicates = function (nums) {
+      if (!nums.length) return 0;
+      let i = 0;
+      for (let j = 1; j < nums.length; j++) {
+        if (nums[j] !== nums[i]) {
+          i++;
+          nums[i] = nums[j];
+        }
+      }
+      return i + 1;
+    };
+
+    // 2.手写题: https://bigfrontend.dev/zh/typescript/OmitThisParameter
+    // 15. 实现OmitThisParameter<T>
+  </script>
+</html>
